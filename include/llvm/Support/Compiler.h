@@ -144,9 +144,14 @@
 // LLVM_BUILTIN_UNREACHABLE - On compilers which support it, expands
 // to an expression which states that it is undefined behavior for the
 // compiler to reach this point.  Otherwise is not defined.
+// This builtin is disabled for MIPS as there are known issues in which
+// all versions of GCC toolchain generate wrong code for switch or return
+// statements. Disabled until fixed after it will be possible to narrow it.
+#if !defined(__mips__)
 #if defined(__clang__) || (__GNUC__ > 4) \
  || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)
 # define LLVM_BUILTIN_UNREACHABLE __builtin_unreachable()
+#endif
 #endif
 
 #endif
