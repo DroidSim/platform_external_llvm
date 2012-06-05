@@ -185,7 +185,7 @@
 // to an expression which states that it is undefined behavior for the
 // compiler to reach this point.  Otherwise is not defined.
 #if defined(__clang__) || (__GNUC__ > 4) \
- || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)
+ || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5) && !defined(__INTEL_COMPILER)
 # define LLVM_BUILTIN_UNREACHABLE __builtin_unreachable()
 #endif
 
