@@ -2377,6 +2377,11 @@ SDValue DAGTypeLegalizer::GenWidenVectorLoads(SmallVector<SDValue, 16> &LdChain,
 
   int LdWidth = LdVT.getSizeInBits();
   int WidthDiff = WidenWidth - LdWidth;          // Difference
+
+  if (!LdVT.isPow2VectorType()) {
+      Align = 1;  // Force unaligned load of widen vector
+  }
+
   unsigned LdAlign = (isVolatile) ? 0 : Align; // Allow wider loads
 
   // Find the vector type that can load from.
@@ -2576,6 +2581,10 @@ void DAGTypeLegalizer::GenWidenVectorStores(SmallVector<SDValue, 16>& StChain,
   EVT ValEltVT = ValVT.getVectorElementType();
   unsigned ValEltWidth = ValEltVT.getSizeInBits();
   assert(StVT.getVectorElementType() == ValEltVT);
+
+  if (!StVT.isPow2VectorType()) {
+      Align = 1;  // Force unaligned store of widen vector
+  }
 
   int Idx = 0;          // current index to store
   unsigned Offset = 0;  // offset from base to store
