@@ -1,0 +1,7 @@
+Code-Review+2: Stephen Hines <srhines@google.com>
+Verified+1: Ian Rogers <irogers@google.com>
+Submitted-by: Ian Rogers <irogers@google.com>
+Submitted-at: Thu, 30 Jan 2014 01:07:15 +0000
+Reviewed-on: https://android-review.googlesource.com/80497
+Project: platform/external/llvm
+Branch: refs/heads/master
