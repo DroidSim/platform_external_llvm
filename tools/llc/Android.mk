@@ -91,8 +91,10 @@ include $(BUILD_HOST_EXECUTABLE)
 # llc command line tool (target)
 #===---------------------------------------------------------------===
 
-#TODOArm64: Enable llc build
-ifneq ($(TARGET_ARCH),arm64)
+ifeq ($(TARGET_ARCH),arm64)
+$(warning TODOArm64: Enable llc build)
+endif
+
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := llc
@@ -102,18 +104,13 @@ LOCAL_MODULE_CLASS := EXECUTABLES
 LOCAL_SRC_FILES := $(llvm_llc_SRC_FILES)
 LOCAL_C_INCLUDES += external/llvm/include
 
-ifeq ($(TARGET_ARCH),arm)
-  LOCAL_STATIC_LIBRARIES := $(llvm_llc_arm_STATIC_LIBRARIES)
-else
-  ifeq ($(TARGET_ARCH),mips)
-    LOCAL_STATIC_LIBRARIES := $(llvm_llc_mips_STATIC_LIBRARIES)
-  else
-    ifeq ($(TARGET_ARCH),$(filter $(TARGET_ARCH),x86 x86_64 x32))
-      LOCAL_STATIC_LIBRARIES := $(llvm_llc_x86_STATIC_LIBRARIES)
-    else
-      $(error "Unsupport llc target $(TARGET_ARCH)")
-    endif
-  endif
+LOCAL_STATIC_LIBRARIES_arm := $(llvm_llc_arm_STATIC_LIBRARIES)
+LOCAL_STATIC_LIBRARIES_mips := $(llvm_llc_mips_STATIC_LIBRARIES)
+LOCAL_STATIC_LIBRARIES_x86 := $(llvm_llc_x86_STATIC_LIBRARIES)
+LOCAL_STATIC_LIBRARIES_x86_64 := $(llvm_llc_x86_STATIC_LIBRARIES)
+
+ifeq (,$(filter $(TARGET_ARCH),arm arm64 mips x86 x86_64))
+  $(error Unsupported architecture $(TARGET_ARCH))
 endif
 
 LOCAL_STATIC_LIBRARIES += $(llvm_llc_STATIC_LIBRARIES)
@@ -127,5 +124,3 @@ include $(LLVM_ROOT_PATH)/llvm.mk
 include $(LLVM_DEVICE_BUILD_MK)
 include $(LLVM_GEN_INTRINSICS_MK)
 include $(BUILD_EXECUTABLE)
-
-endif # !arm64
