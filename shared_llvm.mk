@@ -126,8 +126,13 @@ LOCAL_WHOLE_STATIC_LIBRARIES_arm64 += $(llvm_arm_static_libraries)
 
 LOCAL_WHOLE_STATIC_LIBRARIES += $(llvm_post_static_libraries)
 
+ifeq ($(TARGET_OS),gnu_linux)
+LOCAL_SHARED_LIBRARIES := libcutils libc++
+LOCAL_LDLIBS += -lpthread -ldl
+else
 #LOCAL_LDLIBS := -ldl -lpthread
 LOCAL_SHARED_LIBRARIES := libcutils libdl libc++
+endif
 
 include $(LLVM_DEVICE_BUILD_MK)
 include $(BUILD_SHARED_LIBRARY)
